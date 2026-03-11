@@ -1,0 +1,132 @@
+/* CAROUSEL */
+.carousel-container {
+  position: relative;
+}
+
+.carousel-img {
+  height: 550px;
+  object-fit: cover;
+}
+
+.carousel-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+}
+
+.carousel-overlay h1 {
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.carousel-overlay p {
+  max-width: 700px;
+  font-size: 1.2rem;
+}
+
+.hero-buttons {
+  margin-top: 20px;
+}
+
+/* INFO SECTION */
+.info-section {
+  background: linear-gradient(135deg, #c794f0, #f5c2dc);
+  padding: 80px 0;
+}
+
+.info-card {
+  background: linear-gradient(135deg, #5a189a, #9d4edd);
+  color: white;
+  padding: 40px;
+  border-radius: 24px;
+  /* text-align: left; */
+  box-shadow: 0 20px 50px rgba(128, 0, 255, 0.35);
+}
+
+/* IMAGE HOVER EFFECT */
+.about-img {
+  width: 100%;
+  max-height: 320px;
+  object-fit: cover;
+  border-radius: 18px;
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+/* Hover animation */
+.about-img:hover {
+  transform: scale(1.08);
+  box-shadow: 0 20px 60px rgba(255, 105, 180, 0.45),
+              0 10px 30px rgba(128, 0, 255, 0.45);
+}
+
+
+/* FEATURES */
+.features-section {
+  background: linear-gradient(135deg, #5a189a, #9d4edd);
+  padding: 80px 0;
+}
+
+.feature-card {
+  background: linear-gradient(135deg, #c794f0, #f5c2dc);
+  color: rgb(111, 41, 173);
+  padding: 30px;
+  border-radius: 18px;
+  height: 100%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-6px);
+}
+
+.feature-card h5 {
+  font-weight: bold;
+}
+
+/* SECOND INFO SECTION (ALTERNATE LAYOUT) */
+.info-section-alt {
+  background: linear-gradient(135deg, #f5c2dc, #c794f0);
+  padding: 80px 0;
+}
+
+/* reuse same card look but slight variation */
+.info-section-alt .info-card {
+  background: linear-gradient(135deg, #9d4edd, #5a189a);
+  color: white;
+  padding: 40px;
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(128, 0, 255, 0.35);
+}
+
+/* LIST STYLING */
+.info-list {
+  margin-top: 20px;
+  padding-left: 0;
+  list-style: none;
+}
+
+.info-list li {
+  position: relative;
+  padding-left: 28px;
+  margin-bottom: 14px;
+  font-size: 1.05rem;
+}
+
+/* custom bullet */
+.info-list li::before {
+  content: "✔";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #ffb3ec;
+  font-weight: bold;
+}
+
