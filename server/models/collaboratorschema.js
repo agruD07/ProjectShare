@@ -8,6 +8,7 @@
     portfolio: {type:String, required:true},
     bio:{type:String, required:true},
     profilePhoto: {type:String},// required:true
+    // Approved: {type:Bollean, default:false}
  })
  const Collaborator = mongoose.model("collaborators",collaboratorschema)
  module.exports = Collaborator; 

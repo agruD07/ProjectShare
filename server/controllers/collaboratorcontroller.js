@@ -1,5 +1,5 @@
 const express = require("express")
-const Creator = require("../models/creatorschema")
+const Collaborator = require("../models/collaboratorschema")
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const upload = require("../services/imgservices")
@@ -7,31 +7,34 @@ const upload = require("../services/imgservices")
 const router = express.Router()
 const {randomBytes}=require("node:crypto")
 router.post("/register", upload.single("Profile_pic"), async (req, res) => {
-    const { fullName, email, password, phone} = req.body
+    const { fullName, email, password, phone,skills, portfolio,bio } = req.body
     const hashPassword = bcrypt.hashSync(password, 10)
-    const newCreator = new Creator({
+    const newCollaborator = new Collaborator({
         fullName,
         email,
         password: hashPassword,
         phone,
+        skills,
+        portfolio,
+        bio,
         profilePhoto : req.file?.profilePhoto && req.file.profilePhoto[0].filename,
     })
-    await newCreator.save()
-    res.send({ message: "Project Creator registered successfully", newCreator })
+    await newCollaborator.save()
+    res.send({ message: "Collaborator registered successfully", newCollaborator })
 })
 router.post("/login", async (req, res) => {
     const { email, password } = req.body
-    const creator = await Creator.findOne({ email })
+    const collaborator = await Collaborator.findOne({ email })
 
-    if (!creator) {
+    if (!collaborator) {
         res.status(404).send({ message: "No such user" })
 
     }
     else {
-        const iscrtPassword = bcrypt.compareSync(password, creator.password)
+        const iscrtPassword = bcrypt.compareSync(password, collaborator.password)
         if (iscrtPassword) {
-            const token = jwt.sign({ id: creator._id }, process.env.JWT_TOKEN)
-            res.send({ message: "UProject Creator Logged in successfully", creator, token })
+            const token = jwt.sign({ id: collaborator._id }, process.env.JWT_TOKEN)
+            res.send({ message: "Collaborator Logged in successfully", collaborator, token })
         }
         else {
             res.status(400).send({ message: "Incorrect Password" })
