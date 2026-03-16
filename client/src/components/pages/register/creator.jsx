@@ -2,197 +2,133 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import "../../styles/register.css";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../../navbar";
 import Footer from "../../footer";
+import instance from "../../../utils/apiClient"
 
-/* 📞 Phone formatter: +91 00000 00000 */
-const formatPhoneNumber = (value) => {
-  const digits = value.replace(/\D/g, "");
-
-  const country = digits.slice(0, 2);
-  const first = digits.slice(2, 7);
-  const second = digits.slice(7, 12);
-
-  let formatted = "+";
-  if (country) formatted += country;
-  if (first) formatted += " " + first;
-  if (second) formatted += " " + second;
-
-  return formatted;
-};
-
-const CreatorRegister = () => {
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    phone: "",
-    profilePic: null,
-  });
-
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [error, setError] = useState("");
-
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-
-    if (name === "phone") {
-      setFormData({ ...formData, phone: formatPhoneNumber(value) });
-      return;
+function Creator() {
+    const Navigate = useNavigate()
+    const [data, setData] = useState({ fullName: "", phone: "", email: "", password: "", cpassword: "", Profile_pic: "" })
+    const [error, setError] = useState({ fullName: "", phone: "", email: "", password: "", cpassword: "", Profile_pic: "" })
+    function change(e) {
+        setData({ ...data, [e.target.name]: e.target.value })
     }
-
-    setFormData({
-      ...formData,
-      [name]: files ? files[0] : value,
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-
-    /* Required fields */
-    if (
-      !formData.fullName ||
-      !formData.email ||
-      !formData.password ||
-      !formData.confirmPassword ||
-      !formData.phone
-    ) {
-      setError("Please fill all required fields.");
-      return;
+    function upload(e) {
+        setData({ ...data, Profile_pic: e.target.files[0] });
+        // console.log({ ...data, Profile_pic: e.target.files[0] });
+        
     }
-
-    /* Gmail validation */
-    if (!formData.email.endsWith("@gmail.com")) {
-      setError("Email must end with @gmail.com");
-      return;
+    async function submit(e) {
+        e.preventDefault()
+        let localerror = { fullName: "", phone: "", email: "", password: "", cpassword: "", Profile_pic: "" }
+        console.log(data)
+        if (data.fullName == "") {
+            localerror.fullName = "Name is required"
+        }
+        else {
+            localerror.fullName = ""
+        }
+        if (data.phone == "") {
+            localerror.phone = "Contact number is required"
+        }
+        else if (data.phone.length < 10 || data.phone.length > 10) {
+            localerror.phone = "Contact number should be 10 digits"
+        }
+        else {
+            localerror.phone = ""
+        }
+        if (data.email == "") {
+            localerror.email = "Email is required"
+        }
+        else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(data.email)) {
+            localerror.email = "Invalid Email"
+        }
+        else {
+            localerror.email = ""
+        }
+        if (data.password == "") {
+            localerror.password = "Password is required"
+        }
+        else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(data.password)) {
+            localerror.password = "Atleast 8 characters including 1 uppercase, 1 lowercase, 1 number and 1 special character"
+        }
+        else {
+            localerror.password = ""
+        }
+        if (data.cpassword == "") {
+            localerror.cpassword = "Confirm Password is required"
+        }
+        else if (data.cpassword != data.password) {
+            localerror.cpassword = "Password and Confirm Password should be same"
+        }
+        else {
+            localerror.cpassword = ""
+        }
+        if (data.Profile_pic == "") {
+            localerror.Profile_pic = "Profile Picture is required"
+        }
+        else {
+            localerror.Profile_pic = ""
+        }
+        console.log(Object.values(error))
+        setError({ ...localerror })
+        if (Object.values(localerror).every((item) => item === "")) {
+            try {
+                const formData = new FormData()
+                formData.append("fullName", data.fullName)
+                formData.append("phone", data.phone)
+                formData.append("email", data.email)
+                formData.append("password", data.password)
+                formData.append("Profile_pic", data.Profile_pic)
+                const response = await instance.post("/creator/register", formData)
+                alert("Registered Successfully")
+                Navigate("/creatorlogin")
+            }
+            catch (e) {
+                console.error(e)
+                alert(e.response?.data?.message || "Registration Error");
+            }
+        }
+        else {
+            alert("Please fill the form to register")
+        }
     }
+    return (
+        <>
+            <Navbar />
+            <div className="register-container">
+                <div className="register-card">
+                    <form action="" className="form-group">
+                        <h2>Registration</h2>
+                        <label htmlFor="fullName">Full Name: </label>
+                        <input onChange={change} type="text" name="fullName" />
+                        <p className="text-danger">{error.fullName}</p>
+                        <label htmlFor="phone">Contact Number: </label>
+                        <input onChange={change} type="number" name="phone" />
+                        <p className="text-danger">{error.phone}</p>
+                        <label htmlFor="email">Email: </label>
+                        <input onChange={change} type="email" name="email" />
+                        <p className="text-danger">{error.email}</p>
+                        <label htmlFor="password">Password: </label>
+                        <input onChange={change} type="password" name="password" />
+                        <p className="text-danger">{error.password}</p>
+                        <label htmlFor="cpassword">Confirm Password: </label>
+                        <input onChange={change} type="password" name="cpassword" />
+                        <p className="text-danger">{error.cpassword}</p>
+                        <label htmlFor="Profile_pic">Profile Picture</label>
+                        <input onChange={upload} type="file" name="Profile_pic" />
+                        <p className="text-danger">{error.Profile_pic}</p>
+                        <button onClick={submit} value="submit" className="register-btn">REGISTER</button>
+                        <p className="mt-3">
+                            Already have an account? <Link to="/creatorlogin">Login</Link>
+                        </p>
+                    </form>
+                </div>
+            </div>
+            <Footer/>
+        </>
+    )
+}
 
-    /* Phone validation */
-    const phoneRegex = /^\+\d{2}\s\d{5}\s\d{5}$/;
-    if (!phoneRegex.test(formData.phone)) {
-      setError("Phone format must be +91 00000 00000");
-      return;
-    }
-
-    /* Password match */
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
-
-    /* ✅ Payload for backend (RAW password) */
-    const payload = {
-      fullName: formData.fullName,
-      email: formData.email,
-      phone: formData.phone,
-      password: formData.password, // backend will hash
-      profilePic: formData.profilePic,
-      role: "creator",
-    };
-
-    console.log("➡️ Sending to backend:", payload);
-
-    // later:
-    // await apiClient.post("/auth/register", payload);
-
-    alert("Creator registered successfully!");
-  };
-
-  return (
-    <>
-    <Navbar/>
-    <div className="register-container">
-      <form className="register-card" onSubmit={handleSubmit} noValidate>
-        <h3>Project Creator Registration</h3>
-
-        {error && <p className="form-error">{error}</p>}
-
-        <div className="form-group">
-          <label>Full Name <span className="required">*</span></label>
-          <input
-            name="fullName"
-            placeholder="Enter your full name"
-            value={formData.fullName}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Email <span className="required">*</span></label>
-          <input
-            name="email"
-            placeholder="example@gmail.com"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Password <span className="required">*</span></label>
-          <div className="password-wrapper">
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              placeholder="Create password"
-              value={formData.password}
-              onChange={handleChange}
-            />
-            <span className="password-eye" onClick={() => setShowPassword(!showPassword)}>
-              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-            </span>
-          </div>
-        </div>
-
-        <div className="form-group">
-          <label>Confirm Password <span className="required">*</span></label>
-          <div className="password-wrapper">
-            <input
-              type={showConfirmPassword ? "text" : "password"}
-              name="confirmPassword"
-              placeholder="Re-enter password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-            />
-            <span className="password-eye" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
-              {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-            </span>
-          </div>
-        </div>
-
-        <div className="form-group">
-          <label>Phone <span className="required">*</span></label>
-          <input
-            name="phone"
-            placeholder="+91 00000 00000"
-            value={formData.phone}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Profile Picture</label>
-          <input
-            type="file"
-            name="profilePic"
-            accept="image/*"
-            onChange={handleChange}
-          />
-        </div>
-
-        <button className="register-btn">Register</button>
-
-        <Link to="/login" className="login-text">
-          Already have an account? Login
-        </Link>
-      </form>
-    </div>
-    <Footer/>
-    </>
-  );
-};
-
-export default CreatorRegister;
+export default Creator;

@@ -1,11 +1,12 @@
 const express = require("express")
-const Creator = require("../models/creatorschema")
-const jwt = require("jsonwebtoken")
-const bcrypt = require("bcrypt")
-const upload = require("../services/imgservices")
-// const transport =require("../services/emailservice")
 const router = express.Router()
-const {randomBytes}=require("node:crypto")
+const upload = require("../services/imgservices")
+const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
+const Creator = require("../models/creatorschema")
+// const transport = require("../services/emailservices")
+// const { randomBytes } = require("node:crypto")
+
 router.post("/register", upload.single("Profile_pic"), async (req, res) => {
     const { fullName, email, password, phone} = req.body
     const hashPassword = bcrypt.hashSync(password, 10)
@@ -14,11 +15,12 @@ router.post("/register", upload.single("Profile_pic"), async (req, res) => {
         email,
         password: hashPassword,
         phone,
-        profilePhoto : req.file?.profilePhoto && req.file.profilePhoto[0].filename,
+        Profile_pic : req.file?.filename && req.file.filename,
     })
     await newCreator.save()
     res.send({ message: "Project Creator registered successfully", newCreator })
 })
+
 router.post("/login", async (req, res) => {
     const { email, password } = req.body
     const creator = await Creator.findOne({ email })
@@ -39,3 +41,5 @@ router.post("/login", async (req, res) => {
 
     }
 })
+
+module.exports=router

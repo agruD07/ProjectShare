@@ -6,6 +6,7 @@ const upload = require("../services/imgservices")
 // const transport =require("../services/emailservice")
 const router = express.Router()
 const {randomBytes}=require("node:crypto")
+
 router.post("/register", upload.single("Profile_pic"), async (req, res) => {
     const { fullName, email, password, phone,skills, portfolio,bio } = req.body
     const hashPassword = bcrypt.hashSync(password, 10)
@@ -42,3 +43,5 @@ router.post("/login", async (req, res) => {
 
     }
 })
+
+module.exports=router
