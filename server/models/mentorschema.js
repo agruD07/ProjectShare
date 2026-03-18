@@ -1,5 +1,5 @@
  const mongoose = require("mongoose")
- const mentorschema = mongoose.Schema({
+ const mentorSchema = mongoose.Schema({
      fullName: {type:String, required:true},
      email: {type:String, required:true},
      password:{type:String, required:true},
@@ -8,9 +8,10 @@
      experience: {type:String, required:true},
      credentials: {type:String, required:true},
      bio:{type:String, required:true},
-     profilePhoto: {type:String},//, required:true
+     profilePic: {type:String},//, required:true
+     Activated: { type: Boolean, default: false }
  })
- const Mentor = mongoose.model("mentors",mentorschema)
+ const Mentor = mongoose.model("mentors",mentorSchema)
  module.exports = Mentor; 
   
  
