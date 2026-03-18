@@ -1,0 +1,133 @@
+/* PAGE WRAPPER */
+.register-container {
+  min-height: calc(100vh - 80px);
+  background: linear-gradient(90deg,#e7e6ec,#a290dd,#e3e1e9);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:50px 15px;
+}
+
+/* CARD */
+.register-card{
+  background:white;
+  padding:2.5rem;
+  width:500px;
+  border-radius:15px;
+  box-shadow:0 15px 30px rgba(0,0,0,0.2);
+}
+
+.register-card h3{
+  text-align:center;
+  color:#7b2cbf;
+  margin-bottom:1.5rem;
+}
+
+/* FORM GROUP */
+.form-group{
+  display:flex;
+  flex-direction:column;
+  margin-bottom:16px;
+}
+
+.form-group label{
+  font-weight:600;
+  margin-bottom:6px;
+  color:#5e17eb;
+}
+
+/* REQUIRED STAR */
+.required{
+  color:red;
+  margin-left:3px;
+  font-weight:bold;
+}
+
+/* INPUTS */
+.register-card input,
+.register-card textarea{
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #d3bdf0;
+}
+
+/* TEXTAREA */
+.register-card textarea{
+  resize:vertical;
+  min-height:100px;
+}
+
+/* FILE INPUT */
+.register-card input[type="file"]{
+  border:none;
+}
+
+/* PASSWORD FIELD */
+.password-wrapper{
+  position:relative;
+}
+
+.password-wrapper input{
+  padding-right:40px;
+}
+
+.toggle-password{
+  position:absolute;
+  right:12px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+}
+
+/* REGISTER BUTTON */
+.register-btn{
+  width:100%;
+  padding:12px;
+  background:linear-gradient(135deg,#7b2cff,#ff5ea2);
+  color:white;
+  border:none;
+  border-radius:12px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* MULTISELECT FOR MENTOR */
+.multi-select{
+  position:relative;
+}
+
+.multi-select-box{
+  min-height:42px;
+  border:1px solid #d3bdf0;
+  border-radius:8px;
+  padding:6px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+
+.multi-select-placeholder{
+  color:#74777b;   /* grey placeholder color */
+  font-size:16px;
+}
+
+.chip{
+  background:#7b2cff;
+  color:white;
+  padding:5px 8px;
+  border-radius:20px;
+  font-size:13px;
+}
+
+.expertise-dropdown{
+  position:absolute;
+  top:110%;
+  width:100%;
+  background:white;
+  border:1px solid #d3bdf0;
+  border-radius:8px;
+  max-height:200px;
+  overflow-y:auto;
+}
