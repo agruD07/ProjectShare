@@ -1,16 +1,20 @@
 import { Route, Routes } from "react-router-dom";
-import Landingpage from "./components/pages/landingpage";
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import Navbar from "./components/navbar";
-import Footer from "./components/footer";
-import CreatorLogin from "./components/pages/login/creator";
-import CollaboratorLogin from "./components/pages/login/collaborator";
-import MentorLogin from "./components/pages/login/mentor";
-import AdminLogin from "./components/pages/login/admin";
-import CreatorRegister from "./components/pages/register/creator";
-import CollaboratorRegister from "./components/pages/register/collaborator";
-import MentorRegister from "./components/pages/register/mentor";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import AdminLogin from "./pages/login/AdminLogin";
+import LandingPage from "./pages/common/LandingPage";
+import CreatorRegister from "./pages/register/CreatorRegister";
+import CollaboratorRegister from "./pages/register/CollaboratorRegister";
+import MentorRegister from "./pages/register/MentorRegister";
+import CreatorLogin from "./pages/login/CreatorLogin";
+import CollaboratorLogin from "./pages/login/CollaboratorLogin";
+import MentorLogin from "./pages/login/MentorLogin";
+
+
+
 
 
 
@@ -20,7 +24,7 @@ function App(){
     
     <Routes>
       
-      <Route path="/" element={<Landingpage/>}/>
+      <Route path="/" element={<LandingPage/>}/>
       <Route path="/register/creator" element={<CreatorRegister/>} />
       <Route path="/register/collaborator" element={<CollaboratorRegister/>} />
       <Route path="/register/mentor" element={<MentorRegister/>} />
