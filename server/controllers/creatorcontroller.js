@@ -1,45 +1,81 @@
-const express = require("express")
-const router = express.Router()
-const upload = require("../services/imgservices")
+const Creator = require("../models/creatorSchema")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
-const Creator = require("../models/creatorschema")
+
 // const transport = require("../services/emailservices")
 // const { randomBytes } = require("node:crypto")
 
-router.post("/register", upload.single("Profile_pic"), async (req, res) => {
-    const { fullName, email, password, phone} = req.body
-    const hashPassword = bcrypt.hashSync(password, 10)
-    const newCreator = new Creator({
-        fullName,
-        email,
-        password: hashPassword,
-        phone,
-        Profile_pic : req.file?.filename && req.file.filename,
-    })
-    await newCreator.save()
-    res.send({ message: "Project Creator registered successfully", newCreator })
-})
+//--------------------Register--------------
+exports.registerCreator = async (req, res) => {
+    try{
+        const { fullName, email, password, phone} = req.body
+        // Check if already exists
+        const existingUser = await Creator.findOne({ email });
+        if (existingUser) {
+            return res.status(400).send({ message: "User already exists" });
+        }
+    
+        const hashPassword = bcrypt.hashSync(password, 10)
+        const newCreator = new Creator({
+            fullName,
+            email,
+            password: hashPassword,
+            phone,
+            profilePic : req.file ? req.file.filename : null,
 
-router.post("/login", async (req, res) => {
-    const { email, password } = req.body
-    const creator = await Creator.findOne({ email })
+            // IMPORTANT → default false (admin must approve)
+            Activated: false
+        })
+        await newCreator.save();
+        // Renaming password to avoid conflict and hide it from response
+        const { password: hashedPassword, ...creatorData } = newCreator._doc;
 
-    if (!creator) {
-        res.status(404).send({ message: "No such user" })
-
+        res.send({ 
+            message: "Project Creator registered successfully. Wait for admin approval.",
+            creator: creatorData
+        });
+    }catch(err){
+        res.status(500).send({message: "Server error", error: err.message});
     }
-    else {
+};
+
+// ----------------- LOGIN -----------------
+exports.loginCreator = async (req, res) => {
+    try{
+        const { email, password } = req.body;
+        const creator = await Creator.findOne({ email });
+
+        if (!creator) {
+            return res.status(404).send({ message: "No such user" });
+        }
+        // ❗ Check admin approval
+        if (!creator.Activated) {
+            return res.status(403).send({
+                message: "Account not approved by admin yet"
+            });
+        }
+   
         const iscrtPassword = bcrypt.compareSync(password, creator.password)
-        if (iscrtPassword) {
-            const token = jwt.sign({ id: creator._id }, process.env.JWT_TOKEN)
-            res.send({ message: "UProject Creator Logged in successfully", creator, token })
+        if (!iscrtPassword) {
+            return res.status(400).send({ message: "Incorrect Password" })
         }
-        else {
-            res.status(400).send({ message: "Incorrect Password" })
-        }
+        //Add role in token
+        const token = jwt.sign({ 
+            creatorId: creator._id, role :"creator" },
+            process.env.JWT_TOKEN,
+            {expiresIn : "1d"}
+        );
 
+        // Renaming password to avoid conflict and hide it from response
+        const { password: hashedPassword, ...creatorData } = creator._doc;
+
+        res.send({ 
+            message: "Project Creator Logged in successfully",
+            creator: creatorData,
+            token 
+        });
+    }catch(err){
+        res.status(500).send({message : "Server error", error:err.message});
     }
-})
+};
 
-module.exports=router

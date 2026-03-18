@@ -1,15 +1,22 @@
-const express = require("express")
-const Collaborator = require("../models/collaboratorschema")
-const jwt = require("jsonwebtoken")
-const bcrypt = require("bcrypt")
-const upload = require("../services/imgservices")
-// const transport =require("../services/emailservice")
-const router = express.Router()
-const {randomBytes}=require("node:crypto")
+const Collaborator = require("../models/collaboratorSchema")
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
-router.post("/register", upload.single("Profile_pic"), async (req, res) => {
-    const { fullName, email, password, phone,skills, portfolio,bio } = req.body
-    const hashPassword = bcrypt.hashSync(password, 10)
+// const transport =require("../services/emailservice")
+//const {randomBytes}=require("node:crypto")
+
+// ----------------- REGISTER -----------------
+exports.registerCollaborator = async (req, res) => {
+    try{
+        const { fullName, email, password, phone,skills, portfolio,bio } = req.body
+        // Check if already exists
+        const existingUser = await Collaborator.findOne({ email });
+        if (existingUser) {
+            return res.status(400).send({ message: "User already exists" });
+    }
+   
+
+    const hashPassword = bcrypt.hashSync(password, 10);
     const newCollaborator = new Collaborator({
         fullName,
         email,
@@ -18,30 +25,66 @@ router.post("/register", upload.single("Profile_pic"), async (req, res) => {
         skills,
         portfolio,
         bio,
-        profilePhoto : req.file?.profilePhoto && req.file.profilePhoto[0].filename,
-    })
-    await newCollaborator.save()
-    res.send({ message: "Collaborator registered successfully", newCollaborator })
-})
-router.post("/login", async (req, res) => {
-    const { email, password } = req.body
-    const collaborator = await Collaborator.findOne({ email })
+        profilePic : req.file ? req.file.filename : null,
 
-    if (!collaborator) {
-        res.status(404).send({ message: "No such user" })
-
+        // IMPORTANT → default false (admin must approve)
+        Activated: false
+    });
+    await newCollaborator.save();
+    const { password: hashedPassword, ...collaboratorData } = newCollaborator._doc;
+    res.send({ 
+        message: "Collaborator registered successfully. Wait for admin approval.",
+        collaborator : collaboratorData
+    });
+    
+    }catch (err) {
+        res.status(500).send({ message: "Server error", error: err.message });
     }
-    else {
+
+};
+
+// ----------------- LOGIN -----------------
+exports.loginCollaborator = async (req, res) => {
+    try{
+        const { email, password } = req.body;
+
+        const collaborator = await Collaborator.findOne({ email });
+
+        if (!collaborator) {
+            return res.status(404).send({ message: "No such user" });
+
+        }
+        // ❗ Check admin approval
+        if (!collaborator.Activated) {
+            return res.status(403).send({
+                message: "Account not approved by admin yet"
+            });
+        }
+    
         const iscrtPassword = bcrypt.compareSync(password, collaborator.password)
-        if (iscrtPassword) {
-            const token = jwt.sign({ id: collaborator._id }, process.env.JWT_TOKEN)
-            res.send({ message: "Collaborator Logged in successfully", collaborator, token })
+        
+        if (!iscrtPassword) {
+            return res.status(400).send({ message: "Incorrect Password" });
         }
-        else {
-            res.status(400).send({ message: "Incorrect Password" })
-        }
+        //Add role in token
+        // We store 'role' in JWT because users are in different collections.
+        // During authentication, this role helps the middleware decide
+        // which model (Creator/Collaborator/Mentor) to use to fetch the user.
+        const token = jwt.sign(
+            { collaboratorId: collaborator._id, role: "collaborator" },
+             process.env.JWT_TOKEN,
+              { expiresIn: "1d" }
+            );
+            const { password : hashedPassword, ...collaboratorData } = collaborator._doc;
+            res.send({ 
+                message: "Collaborator Logged in successfully",
+                collaborator: collaboratorData,
+                token 
+            });
 
+    }catch(err){
+        res.status(500).send({message:"Server error", error: err.message});
     }
-})
+    
+};
 
-module.exports=router
