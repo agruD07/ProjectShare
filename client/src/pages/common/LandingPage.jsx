@@ -3,19 +3,20 @@ import { Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
-import img1 from "../../assets/img1.jpg";
-import img2 from "../../assets/img2.jpg";
-import img3 from "../../assets/img3.jpg";
-import img4 from "../../assets/img4.jpg";
-import img5 from "../../assets/img5.jpg";
-import img6 from "../../assets/img6.jpg";
-import "./landingpage.css";
-import Navbar from "../navbar";
-import Footer from "../footer";
+import img1 from "../../assets/images/img1.jpg";
+import img2 from "../../assets/images/img2.jpg";
+import img3 from "../../assets/images/img3.jpg";
+import img4 from "../../assets/images/img4.jpg";
+import img5 from "../../assets/images/img5.jpg";
+import img6 from "../../assets/images/img6.jpg";
+import "../../assets/styles/landingpage.css";
+
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
 
 
 
-function Landingpage() {
+function LandingPage() {
   return (
     <>
       
@@ -150,4 +151,4 @@ function Landingpage() {
   );
 }
 
-export default Landingpage;
+export default LandingPage;

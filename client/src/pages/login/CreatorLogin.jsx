@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
-import "../../styles/register.css"; // reuse same CSS
-import Navbar from "../../navbar";
-import Footer from "../../footer";
+import "../../assets/styles/login.css"; // reuse same CSS
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
 
-const MentorLogin = () => {
+const CreatorLogin = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -31,9 +31,9 @@ const MentorLogin = () => {
     }
 
     // 🔹 TEMP login check (replace with backend API later)
-    if (formData.email === "mentorb@example.com" && formData.password === "mentor123") {
-      alert("✅ Mentor/Experts Login Successful");
-      navigate("/mentor/dashboard");
+    if (formData.email === "creator@example.com" && formData.password === "creator123") {
+      alert("✅ Creator Login Successful");
+      navigate("/creator/dashboard");
     } else {
       setError("❌ Invalid credentials");
     }
@@ -41,9 +41,9 @@ const MentorLogin = () => {
 
   return (
     <><Navbar/>
-    <div className="register-container">
-      <form className="register-card" onSubmit={handleSubmit} noValidate>
-        <h3>Mentor Login</h3>
+    <div className="login-container">
+      <form className="login-card" onSubmit={handleSubmit} noValidate>
+        <h3>Project Creator Login</h3>
 
         {error && <p className="form-error">{error}</p>}
 
@@ -83,16 +83,16 @@ const MentorLogin = () => {
           </div>
         </div>
 
-        <button type="submit" className="register-btn">
+        <button type="submit" className="login-btn">
           Login
         </button>
 
-        {/* Login Links styled same as Creator.jsx */}
+        {/* links same as register pages login link */}
         <div>
             <Link to="/forgot-password" className="login-text">Forgot Password?</Link>
         </div>
         <div>
-            <Link to="/register" className="login-text">New to ProjectShare? Register now</Link>
+            <Link to="/register/creator" className="login-text">New to ProjectShare? Register now</Link>
         </div>
       </form>
     </div>
@@ -102,4 +102,4 @@ const MentorLogin = () => {
   );
 };
 
-export default MentorLogin;
+export default CreatorLogin;

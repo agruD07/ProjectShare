@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
-import "../../styles/register.css";
-import Navbar from "../../navbar";
-import Footer from "../../footer";
+import "../../assets/styles/login.css"; // reuse same CSS
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
 
-const AdminLogin = () => {
+const CollaboratorLogin = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -13,15 +13,18 @@ const AdminLogin = () => {
     password: "",
   });
 
+  const [error, setError] = useState({
+    email: "",
+    password: "",
+  });
+
+
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e) => {
@@ -33,20 +36,21 @@ const AdminLogin = () => {
       return;
     }
 
-    /* TEMP ADMIN CHECK (frontend only) */
-    if (formData.email === "admin@admin.com" && formData.password === "admin") {
-      alert("✅ Admin Login Successful");
-      navigate("/admin/dashboard");
+    // 🔹 TEMP login check (replace with backend API later)
+    if (formData.email === "collab@example.com" && formData.password === "collab123") {
+      alert("✅ Collaborator Login Successful");
+      navigate("/collaborator/dashboard");
     } else {
-      setError("❌ Invalid admin credentials");
+      setError("❌ Invalid credentials");
     }
   };
 
   return (
-    <><Navbar/>
-    <div className="register-container">
-      <form className="register-card" onSubmit={handleSubmit} noValidate>
-        <h3>Admin Login</h3>
+    <>
+    <Navbar/>
+    <div className="login-container">
+      <form className="login-card" onSubmit={handleSubmit} noValidate>
+        <h3>Collaborator Login</h3>
 
         {error && <p className="form-error">{error}</p>}
 
@@ -86,19 +90,16 @@ const AdminLogin = () => {
           </div>
         </div>
 
-        <button type="submit" className="register-btn">
+        <button type="submit" className="login-btn">
           Login
         </button>
 
+        {/* Login Links styled same as Creator.jsx */}
         <div>
-          <Link to="/forgot-password" className="login-text">
-            Forgot Password?
-          </Link>
+            <Link to="/forgot-password" className="login-text">Forgot Password?</Link>
         </div>
         <div>
-          <Link to="/register" className="login-text">
-            New to ProjectShare? Register now
-          </Link>
+            <Link to="/register/collaborator" className="login-text">New to ProjectShare? Register now</Link>
         </div>
       </form>
     </div>
@@ -108,4 +109,4 @@ const AdminLogin = () => {
   );
 };
 
-export default AdminLogin;
+export default CollaboratorLogin;
