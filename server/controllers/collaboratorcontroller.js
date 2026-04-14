@@ -13,29 +13,29 @@ exports.registerCollaborator = async (req, res) => {
         const existingUser = await Collaborator.findOne({ email });
         if (existingUser) {
             return res.status(400).send({ message: "User already exists" });
-    }
+        }
    
 
-    const hashPassword = bcrypt.hashSync(password, 10);
-    const newCollaborator = new Collaborator({
-        fullName,
-        email,
-        password: hashPassword,
-        phone,
-        skills,
-        portfolio,
-        bio,
-        profilePic : req.file ? req.file.filename : null,
+        const hashPassword = bcrypt.hashSync(password, 10);
+        const newCollaborator = new Collaborator({
+            fullName,
+            email,
+            password: hashPassword,
+            phone,
+            skills,
+            portfolio,
+            bio,
+            profilePic : req.file ? req.file.filename : null,
 
-        // IMPORTANT → default false (admin must approve)
-        Activated: false
-    });
-    await newCollaborator.save();
-    const { password: hashedPassword, ...collaboratorData } = newCollaborator._doc;
-    res.send({ 
-        message: "Collaborator registered successfully. Wait for admin approval.",
-        collaborator : collaboratorData
-    });
+            // IMPORTANT → default false (admin must approve)
+            Activated: false
+        });
+        await newCollaborator.save();
+        const { password: hashedPassword, ...collaboratorData } = newCollaborator._doc;
+        res.send({ 
+            message: "Collaborator registered successfully. Wait for admin approval.",
+            collaborator : collaboratorData
+        });
     
     }catch (err) {
         res.status(500).send({ message: "Server error", error: err.message });

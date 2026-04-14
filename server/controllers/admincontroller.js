@@ -8,7 +8,7 @@ const Creator = require("../models/creatorSchema");
 exports.adminLogin = async (req, res) => {
   const { email, password } = req.body;
 
-  if (email === "admin@admin.com" && password === "Admin@123") {
+  if (email === "admin@admin.com" && password === "admin") {
     const token = jwt.sign({ admin: true }, process.env.JWT_TOKEN, {
       expiresIn: "1d",
     });
