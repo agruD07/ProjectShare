@@ -1,0 +1,141 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 120px); /* adjust navbar + footer */
+  justify-content: space-between;
+  width: 220px;
+  background: linear-gradient(45deg, #7b2cbf, #9465eb);
+  color: white;
+  padding: 20px;
+}
+
+/* 🔹 Menu items */
+.menu p {
+  padding: 10px;
+  margin: 5px 0;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+
+.menu p:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+/* 🔹 Logout */
+.logout button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #e322e3;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.logout button:hover {
+  background: #dd0a85;
+}
+
+/* 🔥 Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-box {
+  background: white;
+  color: black;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.modal-actions button {
+  margin: 10px;
+  padding: 8px 15px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.modal-actions button:first-child {
+  background: red;
+  color: white;
+}
+
+.modal-actions button:last-child {
+  background: gray;
+  color: white;
+}
+
+/* 🔥 MODAL OVERLAY */
+.modal-overlay {
+  position: fixed;          /* VERY IMPORTANT */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  
+  background: rgba(0, 0, 0, 0.5); /* dark background */
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 9999;            /* 🔥 ensures it's ABOVE everything */
+  backdrop-filter: blur(5px);
+}
+/* ------------------------------------------- */
+/* Modal box */
+.modal-box {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  width: 300px;
+  text-align: center;
+
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+}
+
+/* Buttons */
+.modal-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal-actions button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Logout button */
+.modal-actions button:first-child {
+  background: #ef4444;
+  color: white;
+}
+
+/* Cancel button */
+.modal-actions button:last-child {
+  background: #ccc;
+}
+/* ------------------------------ */

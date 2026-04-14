@@ -1,0 +1,156 @@
+/* ===== MAIN LAYOUT ===== */
+.project-details-container {
+  display: flex;
+  height: calc(100vh - 120px);
+}
+
+.project-details-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* BACK BUTTON */
+.project-details-back {
+  margin-bottom: 15px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #3b82f6;
+}
+
+/* HEADER */
+.project-details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* CARD */
+.project-details-card {
+  background: linear-gradient(45deg, #cab1e0, #9465eb);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  color: white;
+}
+
+/* TASK CARD */
+.project-details-task-card {
+  background: #ffffff;
+  color: black;
+  padding: 12px;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+/* APPLY BUTTON */
+.project-details-apply-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: linear-gradient(45deg, #3b82f6, #ec4899);
+  color: white;
+  font-weight: bold;
+}
+
+/* ===== MODAL (LIKE SIDEBAR) ===== */
+.project-details-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background: rgba(0,0,0,0.5);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 9999;
+  backdrop-filter: blur(5px);
+}
+
+.project-details-modal-box {
+  background: white;
+  color: black;
+  padding: 25px;
+  border-radius: 12px;
+  width: 350px;
+  text-align: center;
+
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+}
+
+.project-details-modal-box textarea {
+  width: 100%;
+  height: 100px;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+/* MODAL BUTTONS */
+.project-details-modal-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.project-details-modal-actions button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.project-details-modal-actions button:first-child {
+  background: #22c55e;
+  color: white;
+}
+
+.project-details-modal-actions button:last-child {
+  background: #ccc;
+}
+
+
+
+
+/* TaskStatus.jsx use same css + this */
+/* ===== TASK STATUS CARD (same as project cards style) ===== */
+.task-card {
+  background: linear-gradient(45deg, #cab1e0, #9465eb);
+  border-radius: 12px;
+  padding: 15px;
+  margin-top: 15px;
+  color: white;
+}
+
+/* TEXT STYLE */
+.task-card h4 {
+  font-weight: bold;
+  color: black;
+}
+
+.task-card p {
+  font-style: italic;
+  color: black;
+  text-align: left;
+}
+
+/* DISABLED TASK (not assigned to user) */
+.task-disabled {
+  opacity: 0.5;
+  pointer-events: none; /* disables interaction */
+}
+
+/* DROPDOWN STYLE */
+.task-card select {
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 6px;
+}

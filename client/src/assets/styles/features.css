@@ -1,0 +1,148 @@
+.features-container {
+  padding: 40px 20px;
+  background: linear-gradient(180deg, #ffffff, #ffffff,#e0c3fb);
+}
+
+.feature-features {
+  margin-bottom: 50px;
+  text-align: center;
+    
+}
+
+/*Key features textcolor*/
+.feature-features h2{
+    color:#022267;
+    text-align: center;
+    
+}
+
+/* HERO */
+.features-hero {
+  background: linear-gradient(135deg, #7b2cbf, #9465eb,#7b2cbf);
+  color: white;
+  padding: 60px;
+  border-radius: 20px;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.features-hero h1 {
+  font-size: 2.8rem;
+}
+
+.features-hero p {
+  max-width: 700px;
+  margin: auto;
+  margin-top: 15px;
+}
+
+/* FEATURE GRID */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* EXACTLY 3 cards */
+  gap: 30px;
+  margin-top: 30px;
+}
+
+/* CARD */
+.feature-card {
+  background: linear-gradient(145deg, #a57cf2, #a57cf2);
+  padding: 35px;              /*  bigger padding */
+  border-radius: 18px;
+  text-align: center;
+  transition: 0.3s;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+
+.feature-card:hover {
+  transform: translateY(-10px) scale(1.03); /* nicer hover */
+}
+
+
+.feature-box {
+  background: linear-gradient(135deg, #ffffff, #e0f2fe);
+  padding: 25px;
+  border-radius: 16px;
+  transition: 0.3s;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.feature-box:hover {
+  transform: translateY(-8px) scale(1.02);
+}
+
+/* TITLE */
+.feature-box h4 {
+  color: #1e3a8a;
+  margin-bottom: 10px;
+}
+
+/* TEXT */
+.feature-box p {
+  color: #334155;
+  font-size: 0.95rem;
+}
+
+/* SECTION */
+.features-section {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 50px;
+  background: linear-gradient(135deg, #5a189a, #9d4edd);
+  border-radius: 16px;
+  padding: 25px;
+  color: white;
+}
+
+.features-section.reverse {
+  flex-direction: row-reverse;
+}
+
+.features-text {
+  flex: 1;
+}
+
+.features-text h2 {
+  margin-bottom: 10px;
+}
+
+.features-img {
+  flex: 1;
+  max-height: 280px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* CTA */
+.features-cta {
+  background: linear-gradient(135deg,#7b2cbf, #9465eb,#7b2cbf);
+  color: white;
+  padding: 40px;
+  text-align: center;
+  border-radius: 20px;
+}
+
+.features-cta button {
+  margin-top: 15px;
+  padding: 10px 25px;
+  border: none;
+  border-radius: 8px;
+  background: white;
+  color: #7b2cbf;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.features-cta button:hover {
+  background: #e0f2fe;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .features-section {
+    flex-direction: column;
+  }
+}
