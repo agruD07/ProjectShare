@@ -5,8 +5,23 @@ const Mentor = require("../models/mentorSchema");
 
 async function authVerify(req, res, next) {
     try {
-        const token = req.headers.authorization.split(" ")[1];
+
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader) {
+            return res.status(401).send({ message: "No token provided" });
+        }
+
+        const token = authHeader.split(" ")[1];
+        //------------//
         const decoded = jwt.verify(token, process.env.JWT_TOKEN);
+        // Handle admin first
+        if (decoded.admin) {
+            req.user = { admin: true };
+            req.role = "admin";
+            return next();
+        }
+
 
         let user;
 
@@ -24,7 +39,7 @@ async function authVerify(req, res, next) {
         if (!user.Activated) return res.status(403).send({ message: "Not approved" });
 
         req.user = user;
-        req.role = decoded.role; // 🔥 VERY USEFUL
+        req.role = decoded.role; 
 
         next();
 
