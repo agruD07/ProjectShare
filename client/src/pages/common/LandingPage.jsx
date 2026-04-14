@@ -8,7 +8,7 @@ import img2 from "../../assets/images/img2.jpg";
 import img3 from "../../assets/images/img3.jpg";
 import img4 from "../../assets/images/img4.jpg";
 import img5 from "../../assets/images/img5.jpg";
-import img6 from "../../assets/images/img6.jpg";
+import img7 from "../../assets/images/img7.png";
 import "../../assets/styles/landingpage.css";
 
 import Navbar from "../../components/Navbar";
@@ -78,7 +78,7 @@ function LandingPage() {
 
               {/* RIGHT: IMAGE */}
               <div className="col-md-6 text-center">
-                <img src={img6} alt="About ProjectShare" className="about-img"/>
+                <img src={img7} alt="About ProjectShare" className="landing-img"/>
               </div>
 
             </div>
@@ -121,7 +121,7 @@ function LandingPage() {
 
 
       {/* FEATURES */}
-      <section className="features-section">
+      <section className="landing-features-section">
         <div className="container">
           <h2 className="text-center mb-5 text-white">
             Everything You Need to Collaborate
@@ -137,7 +137,7 @@ function LandingPage() {
               ["Secure Platform", "Safe and verified collaboration"],
             ].map(([title, desc], i) => (
               <div key={i} className="col-md-4">
-                <div className="feature-card">
+                <div className="landing-feature-card">
                   <h5>{title}</h5>
                   <p>{desc}</p>
                 </div>

@@ -4,6 +4,7 @@ import { Eye, EyeOff } from "lucide-react";
 import "../../assets/styles/login.css"; // reuse same CSS
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import instance from "../../utils/apiClient";
 
 const CollaboratorLogin = () => {
   const navigate = useNavigate();
@@ -24,25 +25,56 @@ const CollaboratorLogin = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // clear error when typing
+    setError((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
 
-    if (!formData.email || !formData.password) {
-      setError("⚠️ Please fill all required fields.");
-      return;
-    }
+  let lerror = { email: "", password: "" };
 
-    // 🔹 TEMP login check (replace with backend API later)
-    if (formData.email === "collab@example.com" && formData.password === "collab123") {
-      alert("✅ Collaborator Login Successful");
+  if (!formData.email) {
+    lerror.email = "Email is required";
+  }
+
+  if (!formData.password) {
+    lerror.password = "Password is required";
+  }
+
+  setError(lerror);
+
+  if (Object.values(lerror).every((item) => item === "")) {
+    try {
+      const response = await instance.post("/collaborator/login", formData);
+
+      // ✅ store token
+      //const token = response.data.token
+      //localStorage.setItem("TOKEN", token)
+      localStorage.setItem("TOKEN", response.data.token);
+
+      // ✅ store user details (IMPORTANT)
+localStorage.setItem("user", JSON.stringify(response.data.collaborator));
+
+
+
+      alert("✅ Login Successful");
+
+      // ✅ React navigation
       navigate("/collaborator/dashboard");
-    } else {
-      setError("❌ Invalid credentials");
+
+    } catch (err) {
+      if (err.response?.data?.message) {
+        setError({email: "", password: err.response.data.message});
+        //setError({ ...lerror, password: err.response.data.message });
+      } else {
+        alert("❌ Login failed");
+      }
     }
+  }
   };
 
   return (
@@ -52,7 +84,7 @@ const CollaboratorLogin = () => {
       <form className="login-card" onSubmit={handleSubmit} noValidate>
         <h3>Collaborator Login</h3>
 
-        {error && <p className="form-error">{error}</p>}
+        
 
         {/* Email */}
         <div className="form-group">
@@ -66,6 +98,7 @@ const CollaboratorLogin = () => {
             value={formData.email}
             onChange={handleChange}
           />
+          {error.email && <p className="form-error">{error.email}</p>}
         </div>
 
         {/* Password */}
@@ -88,6 +121,7 @@ const CollaboratorLogin = () => {
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </span>
           </div>
+          {error.password && <p className="form-error">{error.password}</p>}
         </div>
 
         <button type="submit" className="login-btn">

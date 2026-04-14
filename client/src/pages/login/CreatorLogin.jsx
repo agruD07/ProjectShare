@@ -1,9 +1,13 @@
+//import { AxiosError } from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+
+
 import "../../assets/styles/login.css"; // reuse same CSS
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import instance from "../../utils/apiClient";
 
 const CreatorLogin = () => {
   const navigate = useNavigate();
@@ -13,31 +17,64 @@ const CreatorLogin = () => {
     password: "",
   });
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState({
+    email: "",
+    password: "",
+  });
 
+  const [showPassword, setShowPassword] = useState(false);
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // clear error when typing
+    setError((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setError("");
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!formData.email || !formData.password) {
-      setError("⚠️ Please fill all required fields.");
-      return;
-    }
+  let lerror = { email: "", password: "" };
 
-    // 🔹 TEMP login check (replace with backend API later)
-    if (formData.email === "creator@example.com" && formData.password === "creator123") {
-      alert("✅ Creator Login Successful");
+  if (!formData.email) {
+    lerror.email = "Email is required";
+  }
+
+  if (!formData.password) {
+    lerror.password = "Password is required";
+  }
+
+  setError(lerror);
+
+  if (Object.values(lerror).every((item) => item === "")) {
+    try {
+      const response = await instance.post("/creator/login", formData);
+
+      // ✅ store token
+      //const token = response.data.token
+      //localStorage.setItem("TOKEN", token)
+      localStorage.setItem("TOKEN", response.data.token);
+
+
+      // ✅ store user details (IMPORTANT)
+localStorage.setItem("user", JSON.stringify(response.data.creator));
+      alert("✅ Login Successful");
+
+      // ✅ React navigation
       navigate("/creator/dashboard");
-    } else {
-      setError("❌ Invalid credentials");
+
+    } catch (err) {
+      if (err.response?.data?.message) {
+        setError({email: "", password: err.response.data.message});
+        //setError({ ...lerror, password: err.response.data.message });
+      } else {
+        alert("❌ Login failed");
+      }
     }
-  };
+  }
+};
 
   return (
     <><Navbar/>
@@ -45,7 +82,8 @@ const CreatorLogin = () => {
       <form className="login-card" onSubmit={handleSubmit} noValidate>
         <h3>Project Creator Login</h3>
 
-        {error && <p className="form-error">{error}</p>}
+        
+
 
         {/* Email */}
         <div className="form-group">
@@ -59,6 +97,7 @@ const CreatorLogin = () => {
             value={formData.email}
             onChange={handleChange}
           />
+          {error.email && <p className="form-error">{error.email}</p>}
         </div>
 
         {/* Password */}
@@ -81,6 +120,7 @@ const CreatorLogin = () => {
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </span>
           </div>
+          {error.password && <p className="form-error">{error.password}</p>}
         </div>
 
         <button type="submit" className="login-btn">

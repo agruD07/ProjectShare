@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+
 import "../../assets/styles/login.css"; // reuse same CSS
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import instance from "../../utils/apiClient";
 
 const MentorLogin = () => {
   const navigate = useNavigate();
@@ -12,31 +14,69 @@ const MentorLogin = () => {
     email: "",
     password: "",
   });
+  const [error, setError] = useState({
+      email: "",
+      password: "",
+    });
 
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
-
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // ✅ clear error when typing
+    setError((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    setError("");
+    let lerror = { email: "", password: "" };
 
-    if (!formData.email || !formData.password) {
-      setError("⚠️ Please fill all required fields.");
-      return;
+    if (!formData.email) {
+      lerror.email = "Email is required";
     }
 
-    // 🔹 TEMP login check (replace with backend API later)
-    if (formData.email === "mentorb@example.com" && formData.password === "mentor123") {
-      alert("✅ Mentor/Experts Login Successful");
+    if (!formData.password) {
+      lerror.password = "Password is required";
+    }
+
+    setError(lerror);
+
+    // // 🔹 TEMP login check (replace with backend API later)
+    // if (formData.email === "mentorb@example.com" && formData.password === "mentor123") {
+    //   alert("✅ Mentor/Experts Login Successful");
+    //   navigate("/mentor/dashboard");
+    // } else {
+    //   setError("❌ Invalid credentials");
+    // }
+
+    if (Object.values(lerror).every((item) => item === "")) {
+    try {
+      const response = await instance.post("/mentor/login", formData);
+
+      // ✅ store token
+      //const token = response.data.token
+      //localStorage.setItem("TOKEN", token)
+      localStorage.setItem("TOKEN", response.data.token);
+
+      // ✅ store user details (IMPORTANT)
+localStorage.setItem("user", JSON.stringify(response.data.mentor));
+      alert("✅ Login Successful");
+
+      // ✅ React navigation
       navigate("/mentor/dashboard");
-    } else {
-      setError("❌ Invalid credentials");
+
+    } catch (err) {
+      if (err.response?.data?.message) {
+        setError({email: "", password: err.response.data.message});
+        //setError({ ...lerror, password: err.response.data.message });
+      } else {
+        alert("❌ Login failed");
+      }
     }
+  }
   };
 
   return (
@@ -45,7 +85,7 @@ const MentorLogin = () => {
       <form className="login-card" onSubmit={handleSubmit} noValidate>
         <h3>Mentor Login</h3>
 
-        {error && <p className="form-error">{error}</p>}
+        
 
         {/* Email */}
         <div className="form-group">
@@ -59,6 +99,7 @@ const MentorLogin = () => {
             value={formData.email}
             onChange={handleChange}
           />
+          {error.email && <p className="form-error">{error.email}</p>}
         </div>
 
         {/* Password */}
@@ -81,6 +122,7 @@ const MentorLogin = () => {
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </span>
           </div>
+          {error.password && <p className="form-error">{error.password}</p>}
         </div>
 
         <button type="submit" className="login-btn">
