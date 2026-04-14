@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
+const authVerify = require("../middleware/authMiddleware");
 const adminVerify = require("../middleware/adminMiddleware");
 
 const {
@@ -18,12 +19,15 @@ const {
 router.post("/login", adminLogin);
 
 // view users (admin only)
-router.get("/view/collaborators", adminVerify, viewCollaborators);
-router.get("/view/mentors", adminVerify, viewMentors);
-router.get("/view/creators", adminVerify, viewCreators);
+router.get("/view/collaborators",authVerify, adminVerify, viewCollaborators);
+router.get("/view/mentors",authVerify, adminVerify, viewMentors);
+router.get("/view/creators",authVerify, adminVerify, viewCreators);
 
 // approve / reject
-router.patch("/approve/:role/:id", adminVerify, approveUser);
-router.patch("/reject/:role/:id", adminVerify, rejectUser);
+router.patch("/approve/:role/:id",authVerify, adminVerify, approveUser);
+router.patch("/reject/:role/:id", authVerify,adminVerify, rejectUser);
+
+
+
 
 module.exports = router;
