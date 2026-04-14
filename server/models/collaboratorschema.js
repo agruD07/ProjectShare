@@ -11,7 +11,7 @@
     // Approved: {type:Bollean, default:false}
     Activated: { type: Boolean, default: false }
  })
- const Collaborator = mongoose.model("collaborators",collaboratorSchema)//collection is created here 
+ const Collaborator = mongoose.model("collaborator",collaboratorSchema)//collection is created here 
  module.exports = Collaborator; 
   
  

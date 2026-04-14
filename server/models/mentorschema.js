@@ -11,7 +11,7 @@
      profilePic: {type:String},//, required:true
      Activated: { type: Boolean, default: false }
  })
- const Mentor = mongoose.model("mentors",mentorSchema)
+ const Mentor = mongoose.model("mentor",mentorSchema)
  module.exports = Mentor; 
   
  
