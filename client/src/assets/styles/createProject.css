@@ -66,10 +66,15 @@
 
 /* STATUS BADGE */
 .status-badge {
-  padding: 5px 10px;
-  border-radius: 6px;
-  font-size: 12px;
+  padding: 6px 14px;
+  border-radius: 20px;      /* pill shape */
+  font-size: 13px;
   font-weight: bold;
+
+  display: inline-block;
+  white-space: nowrap;      /* prevents breaking */
+  min-width: 110px;         /* ensures enough width */
+  text-align: center;
 }
 
 /* COLLABORATOR */
@@ -118,9 +123,10 @@
 
 .modal-box {
   background: linear-gradient(180deg, #1e1b4b, #312e81);
-  padding: 20px;
-  border-radius: 12px;
-  width: 400px;
+  padding: 25px;
+  border-radius: 15px;
+  width: 700px;
+  max-width: 90%; 
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -130,9 +136,15 @@
 .modal-box input,
 .modal-box textarea,
 .modal-box select {
-  padding: 10px;
-  border-radius: 6px;
+  padding: 15px;
+  border-radius: 12px;
   border: none;
+}
+
+.modal-box label {
+  display: block;
+  margin-top: 10px;
+  font-weight: 500;
 }
 
 .save-btn {
@@ -149,4 +161,88 @@
   border: none;
   padding: 10px;
   border-radius: 6px;
+}
+
+
+/* NEW FORM ROW LAYOUT */
+.form-row {
+  display: flex;            /* puts label + input side by side */
+  align-items: center;
+  margin-bottom: 12px;
+  gap: 10px;
+}
+
+/* LABEL LEFT SIDE */
+.form-row label {
+  width: 100px;            /* controls label width */
+  font-weight: 600;
+  text-align: left;
+}
+
+/*  INPUT TAKES REST SPACE */
+.form-row input,
+.form-row textarea,
+.form-row select {
+  flex: 1;
+  padding: 6px;
+  border-radius: 6px;
+  border: none;
+}
+
+
+/* ===== COLLAB MODAL ===== */
+.collab-modal {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  width: 700px;
+  max-height: 80vh;              /* scrollable */
+  overflow-y: auto;
+  position: relative;
+}
+
+/* GRID INSIDE MODAL */
+.collab-modal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-top: 15px;
+}
+
+/* REUSE CARD STYLE */
+.collab-modal .collab-card {
+  background: linear-gradient(135deg, #6a11cb, #ca25fc);
+  padding: 15px;
+  border-radius: 12px;
+  color: white;
+}
+
+/* BUTTONS */
+.collab-modal .card-buttons button:first-child {
+  background: #ff4dcd;
+  color: white;
+}
+
+.collab-modal .card-buttons button:last-child {
+  background: #28c76f;
+  color: white;
+}
+/* profile of single collaborator modal */
+.profile-modal-app {
+  background: white;
+  color: black;
+  padding: 25px;
+  border-radius: 15px;
+  width: 400px;
+  text-align: left;
+  position: relative;
+}
+
+.profile-modal-app h2 {
+  text-align: center;
+}
+
+.profile-modal-app .modal-img {
+  display: block;
+  margin: 0 auto 10px;
 }

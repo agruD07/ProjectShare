@@ -108,3 +108,17 @@
 .navbar-toggler-icon {
   filter: brightness(0) invert(1);
 }
+
+
+/* navbar double agent */
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: white;
+  font-size: 10px;
+  padding: 3px 6px;
+  border-radius: 50%;
+  font-weight: bold;
+}

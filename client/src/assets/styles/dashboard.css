@@ -158,3 +158,50 @@
     justify-content: center;
   }
 }
+
+.app-stats-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.app-total {
+  width: 30%;
+  text-align: center;
+}
+
+.app-total h2 {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+
+
+/* ✅ FIXED SMALL CARD SIZE */
+.small-card {
+  height: 300px;
+}
+
+/* ✅ CHART CONTAINER */
+.chart-box {
+  position: relative;
+  width: 65%;
+  height: 220px;
+}
+
+/* ✅ SCROLLABLE RECENT PROJECTS */
+.scroll-list {
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+/* Optional nice scrollbar */
+.scroll-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scroll-list::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}

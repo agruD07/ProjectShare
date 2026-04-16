@@ -1,0 +1,129 @@
+/* LAYOUT */
+.chat-page {
+  display: flex;
+  height: calc(100vh - 120px);
+}
+
+.chat-container {
+  display: flex;
+  width: 100%;
+  height: calc(100vh - 100px);
+  background: #f5f5f5;
+}
+
+.dashboard-container {
+  display: flex;
+}
+
+/* LEFT */
+.chat-list {
+  width: 30%;
+  border-right: 1px solid #ddd;
+  overflow-y: auto;
+  background: linear-gradient(135deg, #bb9cde, #9700c5);;
+}
+
+
+.chat-user {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.chat-user:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.chat-user img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+}
+
+/* RIGHT SIDE */
+/* RIGHT */
+.chat-window {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* HEADER */
+.chat-header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: linear-gradient(135deg, #6a11cb, #ca25fc);
+  color: white;
+}
+
+.chat-header img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin: 0 10px;
+}
+
+/* MESSAGES */
+.chat-messages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+ display: flex;
+  flex-direction: column;
+}
+
+/* MESSAGE STYLE */
+.msg {
+  max-width: 60%;
+  padding: 10px;
+  /* padding: 8px 12px; */
+  border-radius: 10px;
+  margin: 5px 0;
+  word-break: break-word;
+}
+
+.sent {
+    align-self: flex-end;
+  background: #ca25fc;
+  color: white;
+  /* margin-right: auto; */
+}
+
+.received {
+  align-self: flex-start;  
+  background: linear-gradient(135deg, #b84fe9, #ca25fc);
+}
+
+.chat-input {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+}
+
+.chat-input button {
+  margin-left: 10px;
+  background: #ca25fc;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 20px;
+}
+
+/* EMPTY STATE */
+.no-chat {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #aaa;
+}

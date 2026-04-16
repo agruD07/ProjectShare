@@ -139,3 +139,32 @@
   background: #ccc;
 }
 /* ------------------------------ */
+
+
+/*mobile view*/
+/* @media (max-width: 768px) {
+
+  .project-dashboard-container {
+    flex-direction: column; 
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .menu {
+    display: flex;
+    gap: 10px;
+  }
+
+  .menu p {
+    white-space: nowrap;
+  }
+
+  .logout {
+    display: none;
+  }
+} */

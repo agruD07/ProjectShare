@@ -28,6 +28,8 @@
 }
 
 
+
+
 .create-btn {
   padding: 10px 15px;
   border: none;
@@ -157,4 +159,101 @@
   border: none;
   padding: 10px;
   border-radius: 6px;
+}
+
+/* NEW FORM ROW LAYOUT */
+.form-row {
+  display: flex;            /* puts label + input side by side */
+  align-items: center;
+  margin-bottom: 12px;
+  gap: 10px;
+}
+
+/* LABEL LEFT SIDE */
+.form-row label {
+  width: 100px;            /* controls label width */
+  font-weight: 600;
+  text-align: left;
+}
+
+/*  INPUT TAKES REST SPACE */
+.form-row input,
+.form-row textarea,
+.form-row select {
+  flex: 1;
+  padding: 6px;
+  border-radius: 6px;
+  border: none;
+}
+
+
+/* select-option dropdown */
+.custom-select {
+  position: relative;
+  width: 250px;
+}
+
+/* main box */
+.select-box {
+  background: linear-gradient(135deg, #8613b0, #53069b);
+  color: white;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* arrow base */
+.arrow {
+  display: inline-block;
+  transition: transform 0.3s ease;
+  margin-left: 10px;
+  
+}
+
+/* rotate when open */
+.arrow.rotate {
+  transform: rotate(180deg);
+  transition: transform 0.5s ease;
+}
+
+/* dropdown container */
+.select-dropdown {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, #9f65d1, #a855f7);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  z-index: 1000;
+}
+
+/* options */
+.select-option {
+  padding: 10px;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+/* hover effect */
+.select-option:hover {
+  background: #d481f5;
+  color: black;
+}
+
+/* error messsage of no project selected for Create Project Button */
+.error-msg {
+  background: #ffe4e6;
+  color: #b91c1c;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-weight: 500;
 }

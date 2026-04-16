@@ -1,0 +1,91 @@
+.profile-container {
+  display: flex;
+  height: calc(100vh - 120px);/*add this-  sidebar- footer align*/
+}
+
+.profile-content {
+  flex: 1;
+  padding: 20px;
+}
+
+.profile-card {
+  display: flex;
+  background: linear-gradient(135deg, #6a11cb, #ca25fc);
+  padding: 30px;
+  border-radius: 15px;
+  color: white;
+  gap: 30px;
+}
+
+.profile-left img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-right {
+  flex: 1;
+}
+
+.profile-right h2 {
+  margin-bottom: 10px;
+}
+
+.profile-right input,
+.profile-right textarea {
+  width: 100%;
+  margin-top: 5px;
+  padding: 8px;
+  border-radius: 5px;
+  border: none;
+}
+
+.profile-right button {
+  margin-top: 10px;
+  margin-right: 10px;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* CollaboratorProfile css -- skill */
+.skills-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 5px;
+}
+
+.skill-chip {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 12px;
+}
+
+.portfolio-links {
+  display: flex;
+  flex-direction: column;
+  margin-top: 5px;
+  gap: 5px;
+}
+
+.portfolio-link {
+  color: #fff;
+  text-decoration: underline;
+  font-size: 14px;
+}
+
+.portfolio-link:hover {
+  color: #ffd6ff;
+}
+
+
+
+/* Collaborator Portfolio */
+
+
+
+/* mentor */
