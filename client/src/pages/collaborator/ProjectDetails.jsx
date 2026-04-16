@@ -28,18 +28,12 @@ function ProjectDetails() {
 
   const fetchData = async () => {
     try {
-      const token = localStorage.getItem("token");
+      // const token = localStorage.getItem("TOKEN");
 
       const [proj, task, app] = await Promise.all([
-        API.get(`/collaborator/projects/${id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        }),
-        API.get(`/collaborator/tasks/${id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        }),
-        API.get(`/collaborator/my-application/${id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        })
+        API.get(`/collaborator/projects/${id}`),
+        API.get(`/collaborator/tasks/${id}`),
+        API.get(`/collaborator/my-application/${id}`)
       ]);
 
       setProject(proj.data.project);
@@ -61,9 +55,9 @@ function ProjectDetails() {
     try {
       await API.post("/collaborator/apply",
         { projectId: id, message },
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-        }
+        // {
+        //   headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        // }
       );
       setAppStatus("Pending");
       setRemainingDays(0);

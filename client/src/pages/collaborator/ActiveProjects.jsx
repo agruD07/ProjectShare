@@ -16,11 +16,7 @@ function ActiveProjects() {
 
   const fetchProjects = async () => {
     try {
-      const res = await API.get("/collaborator/active-projects", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`
-        }
-      });
+      const res = await API.get("/collaborator/active-projects");
 
       const filtered = (res.data.projects || []).filter(
         p => p && p.status !== "Completed" // optional if you want only active ongoing

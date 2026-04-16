@@ -18,15 +18,11 @@ function TaskStatus() {
 
   const fetchData = async () => {
     try {
-      const token = localStorage.getItem("token");
+      // const token = localStorage.getItem("TOKEN");
 
       const [proj, task] = await Promise.all([
-        API.get(`/collaborator/projects/${id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        }),
-        API.get(`/collaborator/tasks/${id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        })
+        API.get(`/collaborator/projects/${id}`),
+        API.get(`/collaborator/tasks/${id}`)
       ]);
 
       setProject(proj.data.project);
@@ -42,11 +38,11 @@ function TaskStatus() {
     try {
       await API.put(`/collaborator/task-status/${taskId}`,
         { status: newStatus },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-          }
-        }
+        // {
+        //   headers: {
+        //     Authorization: `Bearer ${localStorage.getItem("token")}`
+        //   }
+        // }
       );
 
       // update UI

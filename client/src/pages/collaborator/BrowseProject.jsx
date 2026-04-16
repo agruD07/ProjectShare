@@ -24,11 +24,14 @@ function BrowseProject() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const res = await API.get("/collaborator/projects", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-          }
-        });
+         const res = await API.get("/collaborator/projects")//interceptor apiClient.jsx
+
+        //manual header
+        //const res = await API.get("/collaborator/projects")//, {
+        //   headers: {
+        //     Authorization: `Bearer ${localStorage.getItem("token")}`
+        //   }
+        // });
 
         console.log("API RESPONSE:", res.data);
 

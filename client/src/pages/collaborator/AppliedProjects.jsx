@@ -16,11 +16,7 @@ function AppliedProjects() {
 
   const fetchProjects = async () => {
     try {
-      const res = await API.get("/collaborator/applied-projects", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`
-        }
-      });
+      const res = await API.get("/collaborator/applied-projects");
 
       const filtered = (res.data.projects || []).filter(
         p => p.applicationStatus !== "Approved"
