@@ -27,3 +27,5 @@ coverage/
 
 # Optional
 package-lock.json
+
+/server/uploads/
