@@ -51,19 +51,23 @@ const CollaboratorLogin = () => {
     try {
       const response = await instance.post("/collaborator/login", formData);
 
-      // ✅ store token
+      //  store token
       //const token = response.data.token
       //localStorage.setItem("TOKEN", token)
       localStorage.setItem("TOKEN", response.data.token);
-
-      // ✅ store user details (IMPORTANT)
-localStorage.setItem("user", JSON.stringify(response.data.collaborator));
+      
+      // store user details (IMPORTANT)
+    // localStorage.setItem("USER", JSON.stringify(response.data.collaborator));
+localStorage.setItem("USER", JSON.stringify({
+  _id: response.data.collaborator._id,
+  role: "collaborator"
+}));
 
 
 
       alert("✅ Login Successful");
 
-      // ✅ React navigation
+      //  React navigation
       navigate("/collaborator/dashboard");
 
     } catch (err) {

@@ -56,16 +56,21 @@ const MentorLogin = () => {
     try {
       const response = await instance.post("/mentor/login", formData);
 
-      // ✅ store token
+      //-- store token
       //const token = response.data.token
       //localStorage.setItem("TOKEN", token)
       localStorage.setItem("TOKEN", response.data.token);
 
-      // ✅ store user details (IMPORTANT)
-localStorage.setItem("user", JSON.stringify(response.data.mentor));
-      alert("✅ Login Successful");
+      // store user details (IMPORTANT)
+// localStorage.setItem("USER", JSON.stringify(response.data.mentor));
+localStorage.setItem("USER", JSON.stringify({
+  _id: response.data.mentor._id,
+  role: "mentor"
+}));
 
-      // ✅ React navigation
+alert("✅ Login Successful");
+
+      // React navigation
       navigate("/mentor/dashboard");
 
     } catch (err) {

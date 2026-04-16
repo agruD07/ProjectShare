@@ -59,8 +59,13 @@ const CreatorLogin = () => {
 
 
       // ✅ store user details (IMPORTANT)
-localStorage.setItem("user", JSON.stringify(response.data.creator));
-      alert("✅ Login Successful");
+// localStorage.setItem("USER", JSON.stringify(response.data.creator));
+localStorage.setItem("USER", JSON.stringify({
+  _id: response.data.creator._id,
+  role: "creator"
+}));
+
+alert("✅ Login Successful");
 
       // ✅ React navigation
       navigate("/creator/dashboard");
