@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import API from "../../utils/apiClient";
 
 import Sidebar from "../../components/Sidebar";
@@ -10,7 +11,10 @@ import "../../assets/styles/createProject.css";
 function CreateProject() {
   const [projects, setProjects] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [showCollab, setShowCollab] = useState(null); // popup control
+  const [selectedCollabs, setSelectedCollabs] = useState(null); // popup control
+  const [editingId, setEditingId] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     title: "",
@@ -47,10 +51,56 @@ function CreateProject() {
         techStack: form.techStack.split(",").map((t) => t.trim()),
       };
 
-      const res = await API.post("/creator/projects", payload);
-      setProjects([...projects, res.data.project]);
+      if (editingId) {
+        //  UPDATE
+        const res = await API.put(`/creator/projects/${editingId}`, payload);
 
-      setShowModal(false);
+        setProjects(projects.map(p =>
+          p._id === editingId ? res.data.project : p
+        ));
+
+      } else {
+        // ✅ CREATE
+        const res = await API.post("/creator/projects", payload);
+        setProjects([...projects, res.data.project]);
+      }
+
+      closeModal();
+
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // DELETE
+  const handleDelete = async (id) => {
+    try {
+      await API.delete(`/creator/projects/${id}`);
+      setProjects(projects.filter(p => p._id !== id));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // EDIT
+  const handleEdit = (p) => {
+    setEditingId(p._id);
+
+    setForm({
+      title: p.title,
+      description: p.description,
+      category: p.category,
+      techStack: p.techStack.join(", "),
+      status: p.status,
+    });
+
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setEditingId(null);
+      
 
       setForm({
         title: "",
@@ -59,9 +109,7 @@ function CreateProject() {
         techStack: "",
         status: "Planning",
       });
-    } catch (err) {
-      console.error(err);
-    }
+
   };
 
   // STATUS COLOR + TEXT COLOR
@@ -102,7 +150,13 @@ function CreateProject() {
           {/* HEADER */}
           <div className="project-header">
             <h2>My Projects</h2>
-            <button className="create-btn" onClick={() => setShowModal(true)}>
+            <button
+              className="create-btn"
+              onClick={() => {
+                setEditingId(null);
+                setShowModal(true);
+              }}
+            >
               + Create Project
             </button>
           </div>
@@ -128,10 +182,10 @@ function CreateProject() {
                     <td colSpan="7">No projects found</td>
                   </tr>
                 ) : (
-                  projects.map((p, i) => (
-                    <tr key={i}>
-                      <td>{p.title}</td>
-                      <td>{p.description}</td>
+                  projects.map((p,i) => (
+                  <tr key={p._id}>
+                    <td>{p.title}</td>
+                    <td>{p.description}</td>
 
                       {/* STATUS */}
                       <td>
@@ -144,53 +198,28 @@ function CreateProject() {
                       </td>
 
                       <td>{p.category}</td>
-
                       <td>{p.techStack?.join(", ")}</td>
 
                       {/* COLLABORATORS */}
                       <td>
                         <span
                           className="collab-count"
-                          onClick={() => setShowCollab(showCollab === i ? null : i)}
+                          onClick={() => {
+                            if (p.collaborators?.length > 0) {
+                              setSelectedCollabs(p.collaborators);
+                            }
+                          }}
                         >
                           {p.collaborators?.length || 0}
                         </span>
 
-                        {/* POPUP */}
-                        {showCollab === i && (
-                          <div className="collab-popup">
-                            {p.collaborators?.length > 0 ? (
-                              p.collaborators.map((c) => (
-                                <div key={c._id} className="collab-item">
-    
-                                  <span>{c.fullName}</span>
-
-                                  <div className="collab-actions">
-                                    <button onClick={() => handleViewProfile(c._id)}>
-                                      View Profile
-                                    </button>
-
-                                    <button onClick={() => handleChat(c._id)}>
-                                      Chat
-                                    </button>
-                                  </div>
-
-                                </div>
-                              ))
-                            ) : (
-                              <p>No collaborators</p>
-                            )}
-                            <button onClick={() => setShowCollab(null)}>
-                              Close
-                            </button>
-                          </div>
-                        )}
+                        
                       </td>
 
                       {/* ACTIONS */}
                       <td className="actions">
-                        <span>✏️</span>
-                        <span>🗑️</span>
+                        <span onClick={() => handleEdit(p)}>✏️</span>
+                      <span onClick={() => handleDelete(p._id)}>🗑️</span>
                       </td>
                     </tr>
                   ))
@@ -204,27 +233,36 @@ function CreateProject() {
 
       <Footer />
 
-      {/* MODAL */}
+
+      {/* MODAL for Create / Edit Project*/}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-box">
 
-            <h3>Create Project</h3>
+            <h3>{editingId ? "Edit Project" : "Create Project"}</h3>
 
+           <div className="form-row">
+            <label>Title</label>
             <input
               name="title"
               placeholder="Project Title"
               value={form.title}
               onChange={handleChange}
             />
+           </div>
 
+           <div className="form-row">
+            <label>Description</label>
             <textarea
               name="description"
               placeholder="Project Description"
               value={form.description}
               onChange={handleChange}
             />
+           </div>
 
+           <div className="form-row">
+            <label>Category</label>
             <select name="category" value={form.category} onChange={handleChange}>
               <option value="">Select Category</option>
               <option>Web Development</option>
@@ -240,27 +278,34 @@ function CreateProject() {
               <option>Content Creation</option>
               <option>Business Strategy</option>
             </select>
+           </div>
 
+           <div className="form-row">
+            <label>Tech Stack</label>
             <input
               name="techStack"
               placeholder="React, Node.js, MongoDB, Express"
               value={form.techStack}
               onChange={handleChange}
             />
+           </div>
 
+           <div className="form-row">
+            <label>Status</label>
             <select name="status" value={form.status} onChange={handleChange}>
               <option>Planning</option>
               <option>In Progress</option>
               <option>Completed</option>
               <option>On Hold</option>
             </select>
+           </div>
 
             <div className="modal-actions">
               <button className="save-btn" onClick={handleSubmit}>
                 Save Project
               </button>
 
-              <button className="cancel-btn" onClick={() => setShowModal(false)}>
+              <button className="cancel-btn" onClick={closeModal}>{/* FIX: reset form */}
                 Cancel
               </button>
             </div>
@@ -268,6 +313,112 @@ function CreateProject() {
           </div>
         </div>
       )}
+
+      {/* MODAL for collaboratore view */}
+      {selectedCollabs && (
+  <div className="modal-overlay">
+    <div className="collab-modal">
+
+      <span className="close" onClick={() => setSelectedCollabs(null)}>×</span>
+
+      <h2>Collaborators</h2>
+
+      <div className="collab-modal-grid">
+
+        {selectedCollabs.length > 0 ? (
+          selectedCollabs.map((user) => (
+            <div className="collab-card" key={user._id}>
+
+              <div className="card-header">
+                <img
+                  src={
+                    user.profilePic
+                      ? `http://localhost:8080/uploads/${user.profilePic}`
+                      : "https://via.placeholder.com/100"
+                  }
+                  alt=""
+                />
+                <h3>{user.fullName}</h3>
+              </div>
+
+              {/* <p className="bio">{user.bio}</p>
+
+              <div className="skills-box">
+                {user.skills?.map((s, i) => (
+                  <span key={i} className="skill-chip">{s}</span>
+                ))}
+              </div> */}
+
+              <div className="card-buttons">
+                <button onClick={() => setSelectedUser(user)}>
+                  View Profile
+                </button>
+
+                <button
+                  onClick={() =>
+                    navigate("/creator/chat", { state: user })
+                  }
+                >
+                  Chat
+                </button>
+              </div>
+
+            </div>
+          ))
+        ) : (
+          <p>No collaborators</p>
+        )}
+
+      </div>
+
+    </div>
+  </div>
+  )}
+
+
+  {/* modal view single collaborator profile */}
+  {selectedUser && (
+  <div className="modal-overlay">
+    <div className="profile-modal-app left-align">
+
+      <span className="close" onClick={() => setSelectedUser(null)}>×</span>
+
+      <img
+        src={`http://localhost:8080/uploads/${selectedUser.profilePic}`}
+        alt=""
+        className="modal-img"
+      />
+
+      <h2>{selectedUser.fullName}</h2>
+      <p><strong>Email:</strong> {selectedUser.email}</p>
+
+      <div>
+        <strong>Skills:</strong>
+        <div className="skills-box">
+          {selectedUser.skills?.map((s, i) => (
+            <span key={i} className="skill-chip">{s}</span>
+          ))}
+        </div>
+      </div>
+
+      <p><strong>Bio:</strong> {selectedUser.bio}</p>
+
+      <div className="modal-actions">
+        <button
+          onClick={() =>
+            navigate("/creator/chat", { state: selectedUser })
+          }
+        >
+          Chat
+        </button>
+
+        <button onClick={() => setSelectedUser(null)}>Close</button>
+      </div>
+
+    </div>
+  </div>
+  )}
+
     </>
   );
 }

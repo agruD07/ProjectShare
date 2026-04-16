@@ -15,6 +15,11 @@ function Task() {
   const [showModal, setShowModal] = useState(false);
   const [editingTaskId, setEditingTaskId] = useState(null);
 
+  const [open, setOpen] = useState(false);
+  const selected = projects.find(p => p._id === selectedProject);
+
+  const [error, setError] = useState("");
+
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -167,6 +172,7 @@ function Task() {
   };
 
   const handleEdit = (t) => {
+    setError("");
     setEditingTaskId(t._id);
 
     setForm({
@@ -209,18 +215,38 @@ function Task() {
         <div className="project-dashboard-content">
 
           {/* SELECT PROJECT */}
-          <select
-            className="project-select"
-            value={selectedProject}
-            onChange={(e) => setSelectedProject(e.target.value)}
-          >
-            <option value="">Select Project</option>
-            {projects.map((p) => (
-              <option key={p._id} value={p._id}>
-                {p.title}
-              </option>
-            ))}
-          </select>
+          <div className="custom-select">
+            <div className="select-box" onClick={() => setOpen(!open)}>
+              {selected ? selected.title : "Select Project "}
+
+              <span className={`arrow ${open ? "rotate" : ""}`}>
+                ▼
+              </span>
+            </div>
+
+            {open && (
+              <div className="select-dropdown">
+                {projects.map((p) => (
+                  <div
+                    key={p._id}
+                    className="select-option"
+                    onClick={() => {
+                      setSelectedProject(p._id);
+                      setOpen(false);
+                      setError(""); 
+                    }}
+                  >
+                    {p.title}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          {error && (
+  <div className="error-msg">
+    {error}
+  </div>
+)}
 
           {/* HEADER */}
           <div className="project-header">
@@ -228,10 +254,16 @@ function Task() {
             <button
               className="create-btn"
               onClick={() => {
+                if (!selectedProject) {
+                  setError("Please select a project first");
+                  return;
+                }
+                setError("");  
+
                 resetForm();
                 setShowModal(true);
               }}
-              disabled={!selectedProject}
+              // disabled={!selectedProject}
             >
               + Create Task
             </button>
@@ -306,18 +338,25 @@ function Task() {
 
             <h3>{editingTaskId ? "Edit Task" : "Create Task"}</h3>
 
+           <div className="form-row">
+            <label>Title</label>
             <input
               placeholder="Title"
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
             />
+           </div>
 
+           <div className="form-row">
+            <label>Description</label>
             <textarea
               placeholder="Description"
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
             />
-
+           </div>
+           <div className="form-row">
+            <label>Assign To</label>
             {/* ASSIGN */}
             <select
               value={form.assignedTo}
@@ -339,7 +378,10 @@ function Task() {
                 </option>
               ))}
             </select>
+           </div>
 
+           <div className="form-row">
+            <label>Status</label> 
             <select
               value={form.status}
               onChange={(e) => setForm({ ...form, status: e.target.value })}
@@ -349,7 +391,10 @@ function Task() {
               <option>Completed</option>
               <option>Blocked</option>
             </select>
+            </div>
 
+           <div className="form-row">
+            <label>Priority</label>
             <select
               value={form.priority}
               onChange={(e) => setForm({ ...form, priority: e.target.value })}
@@ -358,13 +403,17 @@ function Task() {
               <option>Medium</option>
               <option>Low</option>
             </select>
+           </div>
 
+           <div className="form-row">
+            <label>Date</label>
             <input
               type="date"
               min={new Date().toISOString().split("T")[0]}
               value={form.dueDate}
               onChange={(e) => setForm({ ...form, dueDate: e.target.value })}
             />
+           </div>
 
             <div className="modal-actions">
               <button className="save-btn" onClick={handleSubmit}>
@@ -376,6 +425,7 @@ function Task() {
                 onClick={() => {
                   resetForm();
                   setShowModal(false);
+                  setError(""); 
                 }}
               >
                 Cancel
