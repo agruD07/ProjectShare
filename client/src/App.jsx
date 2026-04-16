@@ -29,6 +29,14 @@ import ProjectDetails from "./pages/collaborator/ProjectDetails";
 import TaskStatus from "./pages/collaborator/TaskStatus";
 import ActiveProjects from "./pages/collaborator/ActiveProjects";
 import AppliedProjects from "./pages/collaborator/AppliedProjects";
+import CreatorProfile from "./pages/creator/CreatorProfile";
+import CollaboratorProfile from "./pages/collaborator/CollaboratorProfile";
+import MentorProfile from "./pages/mentor/MentorProfile";
+import CViewCollaborator from "./pages/creator/CViewCollaborator";
+import Chat from "./pages/chat/Chat";
+import CViewMentor from "./pages/creator/CViewMentor";
+
+
 
 
 
@@ -47,6 +55,10 @@ function App(){
       <Route path="/features" element={<Features/>}/>
       <Route path="/contact" element={<ContactUs/>}/>
       <Route path="/homeproject" element={<HomeProject/>}/>
+
+
+
+
 
       <Route path="/register/creator" element={<CreatorRegister/>} />
       <Route path="/register/collaborator" element={<CollaboratorRegister/>} />
@@ -67,6 +79,19 @@ function App(){
       <Route path="/creator/projects" element={<CreateProject/>} />
       <Route path="/creator/tasks" element={<Task/>} />
       <Route path="/creator/applications" element={<CApplication/>} />
+      <Route path="/creator/collaborators" element={<CViewCollaborator />} />
+      <Route path="/creator/mentors" element={<CViewMentor />} />
+      <Route 
+        path="/creator/chat" 
+        element={
+          <ProtectedRoute allowedRoles={["creator"]}>
+            <Chat />
+          </ProtectedRoute>
+        } 
+      />
+      <Route path="/creator/profile" element={<CreatorProfile />} />
+      
+
 
       <Route path="/admin/dashboard"
         element={
@@ -88,8 +113,22 @@ function App(){
       <Route path="/collaborator/projects" element={<BrowseProject/>} />
       <Route path="/collaborator/project/:id" element={<ProjectDetails />} />
       <Route path="/collaborator/applied-projects" element={<AppliedProjects />} />
-<Route path="/collaborator/active-projects" element={<ActiveProjects />} />
-<Route path="/collaborator/task-status/:id" element={<TaskStatus />} />
+      <Route path="/collaborator/active-projects" element={<ActiveProjects />} />
+      <Route path="/collaborator/task-status/:id" element={<TaskStatus />} />
+
+
+      <Route path="/collaborator/profile" element={<CollaboratorProfile />} />
+
+      <Route 
+        path="/collaborator/chat" 
+        element={
+          <ProtectedRoute allowedRoles={["collaborator"]}>
+            <Chat />
+          </ProtectedRoute>
+        } 
+      />  
+
+
 
       <Route path="/mentor/dashboard"
         element={
@@ -99,8 +138,18 @@ function App(){
         }
       />
 
-      
-      
+
+      <Route path="/mentor/profile" element={<MentorProfile />} />
+
+    
+      <Route 
+        path="/mentor/chat" 
+        element={
+          <ProtectedRoute allowedRoles={["mentor"]}>
+            <Chat />
+          </ProtectedRoute>
+        } 
+      />
       
 
       

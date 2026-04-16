@@ -56,6 +56,7 @@ function Sidebar() {
       { name: "Portfolio", path: "/collaborator/portfolio" },
       { name: "Chat", path: "/collaborator/chat" },
       { name: "Mentors", path: "/collaborator/mentors" },
+      { name: "Mentorship status", path: "/collaborator/mentors-status" },
       { name: "My Profile", path: "/collaborator/profile" },
     ],
 
