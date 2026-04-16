@@ -3,7 +3,7 @@ const router = express.Router();
 
 const authVerify = require("../middleware/authMiddleware");
 const upload = require("../services/imgService");
-const { registerCollaborator, loginCollaborator } = require("../controllers/collaboratorController");
+const { registerCollaborator, loginCollaborator, updateCollaboratorProfile } = require("../controllers/collaboratorController");
 const { applyToProject, getMyApplicationStatus } = require("../controllers/applicationController");
 
 const { getAllProjects, getSingleProject , getAppliedProjects, getActiveProjects} = require("../controllers/projectController");
@@ -27,5 +27,9 @@ router.get("/my-application/:projectId", authVerify, getMyApplicationStatus);
 router.get("/applied-projects", authVerify, getAppliedProjects);
 router.get("/active-projects", authVerify, getActiveProjects);
 router.put("/task-status/:id", authVerify, updateTaskStatus);
+
+
+//profile
+router.put("/profile", authVerify, upload.single("profilePic"), updateCollaboratorProfile);
 
 module.exports = router;

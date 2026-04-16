@@ -31,7 +31,7 @@ exports.createProject = async (req, res) => {
 exports.getProjects = async (req, res) => {
   try {
     const projects = await Project.find({ creator: req.user._id })
-      .populate("collaborators", "fullName")
+      .populate("collaborators", "fullName email bio skills profilePic")
 
     res.json({ projects });
   } catch (err) {
@@ -167,5 +167,37 @@ exports.getActiveProjects = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Error fetching active projects" });
+  }
+};
+
+// UPDATE PROJECT
+exports.updateProject = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const updated = await Project.findByIdAndUpdate(
+      id,
+      req.body,
+      { new: true }
+    );
+
+    res.json({ project: updated });
+
+  } catch (err) {
+    res.status(500).json({ message: "Error updating project" });
+  }
+};
+
+// DELETE PROJECT
+exports.deleteProject = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await Project.findByIdAndDelete(id);
+
+    res.json({ message: "Deleted successfully" });
+
+  } catch (err) {
+    res.status(500).json({ message: "Error deleting project" });
   }
 };

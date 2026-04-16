@@ -22,8 +22,17 @@ exports.registerCollaborator = async (req, res) => {
             email,
             password: hashPassword,
             phone,
-            skills,
-            portfolio,
+            skills: Array.isArray(skills)
+                ? skills
+                : typeof skills === "string"
+                    ? skills.split(",").map(s => s.trim())
+                    : [],
+
+            portfolio: Array.isArray(portfolio)
+                ? portfolio
+                : typeof portfolio === "string"
+                    ? portfolio.split(",").map(p => p.trim())
+                    : [],
             bio,
             profilePic : req.file ? req.file.filename : null,
 
@@ -49,6 +58,9 @@ exports.loginCollaborator = async (req, res) => {
         const { email, password } = req.body;
 
         const collaborator = await Collaborator.findOne({ email });
+
+        collaborator.lastLogin = new Date();
+        await collaborator.save();
 
         if (!collaborator) {
             return res.status(404).send({ message: "No such user" });
@@ -86,5 +98,41 @@ exports.loginCollaborator = async (req, res) => {
         res.status(500).send({message:"Server error", error: err.message});
     }
     
+};
+//----------------------UPDATE-----------------------------------
+exports.updateCollaboratorProfile = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    const { fullName, skills, bio, phone, portfolio } = req.body;
+
+    const updated = await Collaborator.findByIdAndUpdate(
+      userId,
+      {
+        fullName,
+        bio,
+        phone,
+        skills: Array.isArray(skills)
+            ? skills
+            : typeof skills === "string"
+                ? skills.split(",").map(s => s.trim())
+                : [],
+
+        portfolio: Array.isArray(portfolio)
+            ? portfolio
+            : typeof portfolio === "string"
+                ? portfolio.split(",").map(p => p.trim())
+                : [],
+
+        ...(req.file && { profilePic: req.file.filename })
+      },
+      { new: true }
+    );
+
+    res.send({ message: "Profile updated", user: updated });
+
+  } catch (err) {
+    res.status(500).send({ message: "Error updating profile" });
+  }
 };
 

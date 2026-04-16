@@ -22,6 +22,11 @@ app.use("/collaborator",collaboratorRoutes)
 const mentorRoutes = require("./routes/mentorRoutes.js")
 app.use("/mentor",mentorRoutes)
 
+const chatRoutes = require("./routes/chatRoutes");
+app.use("/chat", chatRoutes);
+
+
+
 app.listen(8080, ()=>{
     console.log("server running at port no:8080")
 })

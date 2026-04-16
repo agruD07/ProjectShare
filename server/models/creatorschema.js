@@ -5,6 +5,12 @@ const creatorSchema = mongoose.Schema({
     password:{type:String, required:true},
     phone: {type:String, required:true},
     profilePic: {type:String},
+
+    bio: { type: String, default: "" },
+    skills: { type: String, default: "" },
+    lastLogin: { type: Date },
+
+
     Activated: { type: Boolean, default: false }
 })
 const Creator = mongoose.model("creator",creatorSchema)

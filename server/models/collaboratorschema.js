@@ -8,6 +8,7 @@
     portfolio: {type:[String], required:true},
     bio:{type:String, required:true},
     profilePic: {type:String},// required:true
+    lastLogin: { type: Date },
     // Approved: {type:Bollean, default:false}
     Activated: { type: Boolean, default: false }
  })

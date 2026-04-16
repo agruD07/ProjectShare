@@ -4,7 +4,7 @@ function adminVerify(req, res, next) {
     try {
         const authHeader = req.headers.authorization;
 
-        // ✅ FIX 1: Check header
+        // FIX 1: Check header
         if (!authHeader) {
             return res.status(401).send({ message: "No token provided" });
         }

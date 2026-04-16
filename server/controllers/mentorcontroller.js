@@ -22,7 +22,9 @@ exports.registerMentor = async (req, res) => {
             email,
             password: hashPassword,
             phone,
-            expertise,
+            expertise: Array.isArray(expertise)
+                ? expertise
+                : expertise.split(",").map(e => e.trim()),
             experience,
             credentials,
             bio,
@@ -84,4 +86,31 @@ exports.loginMentor = async (req, res) => {
         res.status(500).send({message: "Server error", error: err.message});
     }
 };
+//--------------UPDATE--------------------
+exports.updateMentorProfile = async (req, res) => {
+  try {
+    const userId = req.user._id;
 
+    const { fullName, bio, experience, credentials, expertise } = req.body;
+
+    const updated = await Mentor.findByIdAndUpdate(
+      userId,
+      {
+        fullName,
+        bio,
+        experience,
+        credentials,
+        expertise: Array.isArray(expertise)
+          ? expertise
+          : expertise.split(",").map(e => e.trim()),
+        ...(req.file && { profilePic: req.file.filename })
+      },
+      { new: true }
+    );
+
+    res.send({ message: "Profile updated", user: updated });
+
+  } catch (err) {
+    res.status(500).send({ message: "Error updating profile" });
+  }
+};

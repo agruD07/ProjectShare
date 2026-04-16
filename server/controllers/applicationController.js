@@ -45,7 +45,8 @@ exports.applyToProject = async (req, res) => {
       projectId,
       applicantId: req.user._id,
       message,
-      status: "Pending" 
+      status: "Pending" ,
+      isViewed: false
     });
 
 
@@ -67,16 +68,21 @@ exports.getApplicationsForCreator = async (req, res) => {
 
     // find creator's projects
     const projects = await Project.find({ creator: creatorId });
-
     const projectIds = projects.map(p => p._id);
 
+
+
+    // THEN fetch updated data
     const applications = await Application.find({
       projectId: { $in: projectIds }
     })
       .populate("projectId", "title")
-      .populate("applicantId", "fullName");
+      .populate("applicantId", "fullName email skills bio portfolio profilePic")
 
+    // SEND updated data
     res.json({ applications });
+
+
 
   } catch (err) {
     console.error(err);
@@ -206,5 +212,34 @@ exports.getMyApplicationStatus = async (req, res) => {
 
   } catch (err) {
     res.status(500).json({ message: "Error fetching status" });
+  }
+};
+
+// MARK APPLICATIONS AS VIEWED
+exports.markApplicationsViewed = async (req, res) => {
+  try {
+    const creatorId = req.user._id;
+
+    const projects = await Project.find({ creator: creatorId });
+
+    if (!projects.length) {
+      return res.json({ message: "No projects found" });
+    }
+
+    const projectIds = projects.map(p => p._id);
+
+    const result = await Application.updateMany(
+      { projectId: { $in: projectIds }, isViewed: false },
+      { $set: { isViewed: true } } // safer
+    );
+
+    res.json({
+      message: "Applications marked as viewed",
+      modified: result.modifiedCount 
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error updating view status" });
   }
 };

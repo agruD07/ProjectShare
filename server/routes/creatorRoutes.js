@@ -3,10 +3,11 @@ const router = express.Router();
 const authVerify = require("../middleware/authMiddleware");
 
 const upload = require("../services/imgService");
-const { registerCreator, loginCreator } = require("../controllers/creatorController");
-const {createProject, getProjects} = require("../controllers/projectController");
+const { registerCreator, loginCreator, updateProfile,getApprovedCollaborators, getApprovedMentors } = require("../controllers/creatorController");
+const {createProject, getProjects,updateProject,deleteProject} = require("../controllers/projectController");
 const { createTask, getTasksByProject, getProjectUsers, deleteTask, updateTask } = require("../controllers/taskController");
-const { getApplicationsForCreator, updateApplicationStatus } = require("../controllers/applicationController");
+const { getApplicationsForCreator, updateApplicationStatus, markApplicationsViewed } = require("../controllers/applicationController");
+
 
 
 // This file defines API routes and connects them to controller functions.
@@ -23,9 +24,14 @@ router.get("/profile", authVerify, (req, res) => {
     });
 });
 
+
+
+
 //Projects
 router.get("/projects", authVerify, getProjects);
 router.post("/projects", authVerify, createProject);
+router.put("/projects/:id", authVerify, updateProject);
+router.delete("/projects/:id", authVerify, deleteProject);
 
 //Tasks
 router.post("/tasks", authVerify, createTask);
@@ -36,6 +42,19 @@ router.put("/tasks/:taskId", authVerify, updateTask);
 
 //Application
 router.get("/applications", authVerify, getApplicationsForCreator);
+//application-dashboard
+router.put("/applications/mark-viewed", authVerify, markApplicationsViewed);
 router.put("/applications/:id", authVerify, updateApplicationStatus);
+
+
+//View Collaborators
+router.get("/collaborators", authVerify, getApprovedCollaborators);
+
+//View Mentors
+router.get("/mentors", authVerify, getApprovedMentors);
+
+//Profile
+router.put("/profile", authVerify, upload.single("profilePic"), updateProfile);
+
 
 module.exports = router;

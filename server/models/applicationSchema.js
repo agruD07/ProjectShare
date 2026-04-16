@@ -24,6 +24,11 @@ const applicationSchema = new mongoose.Schema(
       enum: ["Pending", "Approved", "Rejected"],
       default: "Pending",
     },
+
+    isViewed: {
+      type: Boolean,
+      default: false
+    },
   },
   { timestamps: true }
 );

@@ -4,7 +4,8 @@ const jwt = require("jsonwebtoken")
 
 // const transport = require("../services/emailservices")
 // const { randomBytes } = require("node:crypto")
-
+const Collaborator = require("../models/collaboratorSchema");
+const Mentor = require("../models/mentorSchema");
 //--------------------Register--------------
 exports.registerCreator = async (req, res) => {
     try{
@@ -45,6 +46,9 @@ exports.loginCreator = async (req, res) => {
         const { email, password } = req.body;
         const creator = await Creator.findOne({ email });
 
+        creator.lastLogin = new Date();
+        await creator.save();
+
         if (!creator) {
             return res.status(404).send({ message: "No such user" });
         }
@@ -79,3 +83,50 @@ exports.loginCreator = async (req, res) => {
     }
 };
 
+//-------------------------UPDAte------------------------------------
+exports.updateProfile = async (req, res) => {
+    try {
+        const userId = req.user._id;
+
+        const { fullName, skills, bio } = req.body;
+
+        const updated = await Creator.findByIdAndUpdate(
+            userId,
+            {
+                fullName,
+                skills,
+                bio,
+                ...(req.file && { profilePic: req.file.filename })
+            },
+            { new: true }
+        );
+
+        res.send({ message: "Profile updated", user: updated });
+
+    } catch (err) {
+        res.status(500).send({ message: "Error updating profile" });
+    }
+};
+
+//------------------Collaborator view-----------------
+exports.getApprovedCollaborators = async (req, res) => {
+    try {
+        const collaborators = await Collaborator.find({ Activated: true })
+            .select("-password");
+
+        res.send({ collaborators });
+    } catch (err) {
+        res.status(500).send({ message: "Error fetching collaborators" });
+    }
+};
+
+exports.getApprovedMentors = async (req, res) => {
+  try {
+    const mentors = await Mentor.find({ Activated: true })
+      .select("-password");
+
+    res.send({ mentors });
+  } catch (err) {
+    res.status(500).send({ message: "Error fetching mentors" });
+  }
+};
